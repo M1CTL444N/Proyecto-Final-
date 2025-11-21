@@ -1,0 +1,112 @@
+#include <stdio.h>
+
+#define MAX_OYENTES 100
+#define MAX_CANCIONES 10
+#define PUNTOS_PRIMERA 30
+#define PUNTOS_SEGUNDA 20
+#define PUNTOS_SUPLEMENTARIOS 10
+
+int main(void) {
+    int votos_oyentes[MAX_OYENTES][3];
+  
+    int votos_totales[MAX_CANCIONES] = {0};
+    int n = 0;
+    int a, b, c; 
+
+    printf("Votación Introduce 3 votos por oyente (canciones 0-%d). Escribe -1 para terminar.\n", MAX_CANCIONES - 1);
+
+ //Conteo 
+    if (scanf("%d", &a) != 1) return 0;
+    while (a != -1 && n < MAX_OYENTES) {
+        if (scanf("%d %d", &b, &c) != 2) {
+            printf("Entrada incompleta. Terminando.\n");
+            break;
+        }
+
+//Almacen
+        votos_oyentes[n][0] = a;
+        votos_oyentes[n][1] = b;
+        votos_oyentes[n][2] = c;
+        
+        votos_totales[a]++;
+        votos_totales[b]++;
+        votos_totales[c]++;
+        
+        n++;
+
+        if (n >= MAX_OYENTES) {
+            printf("Máximo de %d oyentes alcanzado.\n", MAX_OYENTES);
+            break;
+        }
+        if (scanf("%d", &a) != 1) break;
+    }
+
+    if (n == 0) {
+        printf("No se registraron oyentes.\n");
+        return 0;
+    }
+    
+    int cancion_no1 = -1;
+    int cancion_no2 = -1;
+    
+    for (int i = 0; i < MAX_CANCIONES; i++) {
+        if (cancion_no1 == -1 || votos_totales[i] > votos_totales[cancion_no1]) {
+            cancion_no1 = i;
+        }
+    }
+
+    for (int i = 0; i < MAX_CANCIONES; i++) {
+  
+        if (i != cancion_no1) {
+            if (cancion_no2 == -1 || votos_totales[i] > votos_totales[cancion_no2]) {
+                cancion_no2 = i;
+            }
+        }
+    }
+    
+    printf("\n--- Resultados Generales ---\n");
+    printf("Canción No. 1: **%d** (%d votos)\n", cancion_no1, votos_totales[cancion_no1]);
+    printf("Canción No. 2: **%d** (%d votos)\n", cancion_no2, votos_totales[cancion_no2]);
+    printf("Procesados: %d oyentes.\n", n);
+    
+    // --- 3. Cálculo de Puntos y Determinación del Ganador ---
+    int max_puntos = -1;
+    int ganador_oyente_idx = -1; 
+    
+    printf("\n--- Puntuación de Oyentes ---\n");
+
+    for (int i = 0; i < n; i++) {
+        int puntos_actuales = 0;
+        int acerto_no1 = 0; 
+        int acerto_no2 = 0;
+        for (int j = 0; j < 3; j++) {
+            int voto = votos_oyentes[i][j];
+            if (voto == cancion_no1) {
+                acerto_no1 = 1;
+            }
+            
+            if (voto == cancion_no2) {
+                acerto_no2 = 1;
+            }
+        }
+        
+    
+        if (acerto_no1) puntos_actuales += PUNTOS_PRIMERA;
+        if (acerto_no2) puntos_actuales += PUNTOS_SEGUNDA;
+
+        if (acerto_no1 && acerto_no2) {
+            puntos_actuales += PUNTOS_SUPLEMENTARIOS;
+        }
+
+        printf("Oyente %d: %d puntos\n", i, puntos_actuales);
+        if (puntos_actuales > max_puntos) {
+            max_puntos = puntos_actuales;
+            ganador_oyente_idx = i;
+        }
+    }
+    if (ganador_oyente_idx != -1) {
+        printf("\nEl **GANADOR** es el oyente **número %d** con %d puntos.\n", ganador_oyente_idx, max_puntos);
+    } 
+
+    return 0;
+}
