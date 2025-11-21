@@ -5,7 +5,7 @@ int main(void) {
     int n = 0;
     int a, b, c;
 
-    printf("Introduce tríos de votos (primer valor -1 para terminar).\n");
+    printf("Introduce en columnas de 3 los votos (escribe -1 para terminar).\n");
 
     // Leemos el primer número del trío
     if (scanf("%d", &a) != 1) return 0;
@@ -13,7 +13,7 @@ int main(void) {
     while (a != -1 && n < 100) {
         // Leer los dos siguientes valores del trío
         if (scanf("%d %d", &b, &c) != 2) {
-            // Si faltan datos, salir con mensaje
+            // Si faltan datos mensaje
             printf("Entrada incompleta. Terminando.\n");
             break;
         }
@@ -27,10 +27,8 @@ int main(void) {
             printf("Se alcanzo el maximo de 100 oyentes.\n");
             break;
         }
-
-        // Pedir siguiente trío (lee el siguiente primer valor)
         if (scanf("%d", &a) != 1) {
-            // EOF o error
+            // error
             break;
         }
     }
